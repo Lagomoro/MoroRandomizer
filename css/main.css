@@ -1,0 +1,45 @@
+.area-live-streaming {
+    position: relative;
+    border: 1px solid gainsboro;
+    min-height: 400px;
+}
+
+.area-control{
+    position: relative;
+    border: 1px solid gainsboro;
+    min-height: 200px;
+}
+
+.main-card {
+    width: 900px;
+}
+
+.transparent-input{
+    border: none;
+    background: transparent;
+    font-size: 25px;
+}
+
+.no-resize-textarea{
+    padding-left: 40px !important;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    resize: none;
+}
+
+.textarea-auto-height{
+    visibility: hidden;
+}
+
+.loading-message{
+    visibility: hidden;
+    position: absolute;
+    bottom: 0;
+}
+
+.background-transparent{
+    background-color: transparent;
+}
