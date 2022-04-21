@@ -36,10 +36,10 @@ Limit.range = function(element, min, max){
         element.value = Math.max(min, Math.min(H5.readElementValueAsInt(element), max));
     }
 };
-
-Limit.autoHeight = function(element){
-    let span = getElement(element.id + '-auto-height');
-    span.textContent = element.value;
+// --------------------------------------------------------------------------------
+Limit.autoHeight = function(element, auto_id){
+    let auto_element = H5.getElement(auto_id);
+    auto_element.textContent = element.value;
 };
 // ================================================================================
 
@@ -232,69 +232,6 @@ Loading.onPageChange = function(){
 // ================================================================================
 
 
-// --------------------------------------------------------------------------------
-// * Page 1
-// --------------------------------------------------------------------------------
-function page1_doRandom_One(){
-    let min = H5.readValueAsInt('page1-input-min', 0);
-    let max = H5.readValueAsInt('page1-input-max', 1);
-    let num = H5.readValueAsInt('page1-input-number', 1);
-
-    //setInnerText('page1-output-text-value', Util.randomRange(min, max));
-    console.log([1,2,3].splice(0,1))
-}
-
-async function page1_doRandom_All(){
-    let a = new RandomOrgRandomizer();
-    let b = new LocalRandomizer();
-    console.log(await b.getRandomInt(10, 2))
-    console.log(await a.getRandomInt(10, 2))
-}
-
-let random_value = null;
-let click_end = false;
-
-async function page1_doRandom_StartOrEnd(){
-    if (!Util.random_task.isBusy()){
-        Util.random_task.start();
-        startLoading();
-        Util.loading_task.start();
-        setLoadingText('正在从 random.org 取得真随机结果...');
-
-        let min = H5.readValueAsInt('page1-input-min', 0);
-        let max = H5.readValueAsInt('page1-input-max', 1);
-        let num = H5.readValueAsInt('page1-input-number', 1);
-        random_value = await Util.getRandomRange(min, max, num);
-
-        Util.loading_task.end();
-        setLoadingProgress(100);
-        setLoadingText('已取得结果！')
-        
-        if(click_end){
-            Util.random_task.end();
-            endLoading(1000);
-            setInnerText('page1-output-text-value', random_value);
-            random_value = null;
-            click_end = false;
-        }
-    }else{
-        click_end = true;
-        if(random_value != null){
-            Util.random_task.end();
-            endLoading(1000);
-            setInnerText('page1-output-text-value', random_value);
-            random_value = null;
-            click_end = false;
-        }
-    }
-}
-
-function page1_reset(){
-    
-}
-// ================================================================================
-
-
 // ================================================================================
 // * Attribute
 // --------------------------------------------------------------------------------
@@ -309,6 +246,7 @@ let A = {
         },
         hand_clicked: 0,
         random_number_array: null,
+        random_num: 0,
     },
 
     1: {
@@ -318,6 +256,9 @@ let A = {
             progress: 0,
             visible: false,
         },
+        hand_clicked: 0,
+        random_number_array: null,
+        random_num: 0,
     },
 
     2: {
@@ -364,6 +305,8 @@ let R = {
 // --------------------------------------------------------------------------------
 let D = {
 
+    static: new DataArray(),
+
     0: new DataArray(),
 
     1: new DataArray(),
@@ -384,9 +327,9 @@ let F = {
             F[0].initDataArray();
 
             let num = H5.readValueAsInt('0-input-num', 1);
-            if(num > D[0].count) num = D[0].count;
-            let repetition = H5.isChecked(Page.getID('checkbox-repetition'));
-
+            let repetition = H5.isChecked('0-checkbox-repetition');
+            if (!repetition && num > D[0].count) num = D[0].count;
+            
             F[0].setControlDisable(true, []);
             
             let random_index_array = [];
@@ -409,13 +352,11 @@ let F = {
             
             Loading.stop(randomizer.MESSAGE.GET, 1000);
 
-            H5.setInnerText('0-text-random-output', random_number_array.join(' '));
+            H5.setAutoFontSizeText('0-text-random-output', '0-auto-random-output', '0-div-random-output', random_number_array.join(' '));
             H5.setInnerText('0-text-data-output', D[0].getOutputString(' '));
             F[0].setControlDisable(false, []);
             
-            if (D[0].count === 0){
-                F[0].setFuncDisable(true, []);
-            }
+            F[0].setFuncDisable(D[0].count === 0, []);
         },
         handExtract: async function(){
             if(A[0].hand_clicked === 0){
@@ -423,11 +364,13 @@ let F = {
                 A[0].hand_clicked = 1;
 
                 F[0].initDataArray();
-                T[0].random_animation.start();
-
+                
                 let num = H5.readValueAsInt('0-input-num', 1);
-                if(num > D[0].count) num = D[0].count;
                 let repetition = H5.isChecked('0-checkbox-repetition');
+                if (!repetition && num > D[0].count) num = D[0].count;
+                A[0].random_num = num;
+
+                T[0].random_animation.start();
 
                 F[0].setControlDisable(true, ['0-button-hand']);
 
@@ -444,7 +387,6 @@ let F = {
                     for(let i = 1; i <= num; i++){
                         Loading.setText(randomizer.MESSAGE.WAITING_ARRAY.format(i, num));
                         let random_index = await randomizer.getRandomInt(D[0].count);
-                        random_index_array.push(random_index);
                         random_number_array.push(D[0].moveIndexToOutput(random_index));
                     }
                 }
@@ -459,14 +401,12 @@ let F = {
                     T[0].random_animation.stop();
                     Loading.stop(randomizer.MESSAGE.GET, 1000);
 
-                    H5.setInnerText('0-text-random-output', A[0].random_number_array.join(' '));
+                    H5.setAutoFontSizeText('0-text-random-output', '0-auto-random-output', '0-div-random-output', A[0].random_number_array.join(' '));
                     H5.setInnerText('0-text-data-output', D[0].getOutputString(' '));
                     A[0].random_number_array = null;
                     F[0].setControlDisable(false, []);
                     
-                    if (D[0].count === 0){
-                        F[0].setFuncDisable(true, []);
-                    }
+                    F[0].setFuncDisable(D[0].count === 0, []);
 
                 }
 
@@ -482,14 +422,12 @@ let F = {
                     let randomizer = Page.getCurrentRandomizer();
                     Loading.stop(randomizer.MESSAGE.GET, 1000);
 
-                    H5.setInnerText('0-text-random-output', A[0].random_number_array.join(' '));
+                    H5.setAutoFontSizeText('0-text-random-output', '0-auto-random-output', '0-div-random-output', A[0].random_number_array.join(' '));
                     H5.setInnerText('0-text-data-output', D[0].getOutputString(' '));
                     A[0].random_number_array = null;
                     F[0].setControlDisable(false, []);
                     
-                    if (D[0].count === 0){
-                        F[0].setFuncDisable(true, []);
-                    }
+                    F[0].setFuncDisable(D[0].count === 0, []);
 
                 }
 
@@ -499,7 +437,7 @@ let F = {
             F[0].setControlDisable(false, []);
             F[0].setInputDisable(false, []);
             D[0].clear();
-            H5.setInnerText('0-text-random-output', 0);
+            H5.setAutoFontSizeText('0-text-random-output', '0-auto-random-output', '0-div-random-output', Language.DEFAULT);
             H5.setInnerText('0-text-data-output', Language.EMPTY);
         },
 
@@ -541,6 +479,179 @@ let F = {
         },
     },
 
+    1: {
+        showData: function(){
+            let auto_text = H5.getTextContent('1-input-list-auto');
+            if (auto_text === null || auto_text == ''){
+                H5.setTextContent('1-input-list-auto', H5.getValue('1-input-list'));
+            }else{
+                H5.setTextContent('1-input-list-auto', null);
+            }
+        },
+        updateEliminate: function(){
+            D[1].setEliminateString(H5.readValueAsString('1-input-eliminate', ''), ' ');
+            if(D[1].isEmpty()){
+                D.static.clear();
+                D.static.setInputString(H5.readValueAsString('1-input-list', '1 2 3 4'), ' ')
+                D.static.setEliminateString(H5.readValueAsString('1-input-eliminate', ''), ' ');
+                F[1].setFuncDisable(D.static.count === 0, []);
+            }else{
+                F[1].setFuncDisable(D[1].count === 0, []);
+            }
+        },
+        autoExtract: async function(){
+            F[1].initDataArray();
+
+            let num = H5.readValueAsInt('1-input-num', 1);
+            if (num > D[1].count) num = D[1].count;
+            
+            F[1].setControlDisable(true, []);
+            
+            let random_number_array = [];
+            
+            let randomizer = Page.getCurrentRandomizer();
+            Loading.start(randomizer.MESSAGE.WAITING);
+            for(let i = 1; i <= num; i++){
+                Loading.setText(randomizer.MESSAGE.WAITING_ARRAY.format(i, num));
+                let random_index = await randomizer.getRandomInt(D[1].count);
+                random_number_array.push(D[1].moveIndexToOutput(random_index));
+            }
+            
+            Loading.stop(randomizer.MESSAGE.GET, 1000);
+
+            H5.setAutoFontSizeText('1-text-random-output', '1-auto-random-output', '1-div-random-output', random_number_array.join(' '));
+            H5.setInnerText('1-text-data-output', D[1].getOutputString(' '));
+            F[1].setControlDisable(false, []);
+            
+            F[1].setFuncDisable(D[1].count === 0, []);
+        },
+        handExtract: async function(){
+            if(A[1].hand_clicked === 0){
+
+                A[1].hand_clicked = 1;
+
+                F[1].initDataArray();
+                
+                let num = H5.readValueAsInt('1-input-num', 1);
+                if (num > D[1].count) num = D[1].count;
+                A[1].random_num = num;
+
+                T[1].random_animation.start();
+
+                F[1].setControlDisable(true, ['1-button-hand']);
+
+                let random_number_array = [];
+                
+                let randomizer = Page.getCurrentRandomizer();
+                Loading.start(randomizer.MESSAGE.WAITING);
+                for(let i = 1; i <= num; i++){
+                    Loading.setText(randomizer.MESSAGE.WAITING_ARRAY.format(i, num));
+                    let random_index = await randomizer.getRandomInt(D[1].count);
+                    random_number_array.push(D[1].moveIndexToOutput(random_index));
+                }
+                
+                A[1].random_number_array = random_number_array;
+                Loading.wait(randomizer.MESSAGE.GET);
+
+                if(A[1].hand_clicked === 2){
+
+                    A[1].hand_clicked = 0;
+
+                    T[1].random_animation.stop();
+                    Loading.stop(randomizer.MESSAGE.GET, 1000);
+
+                    H5.setAutoFontSizeText('1-text-random-output', '1-auto-random-output', '1-div-random-output', A[1].random_number_array.join(' '));
+                    H5.setInnerText('1-text-data-output', D[1].getOutputString(' '));
+                    A[1].random_number_array = null;
+                    F[1].setControlDisable(false, []);
+                    
+                    F[1].setFuncDisable(D[1].count === 0, []);
+
+                }
+
+            } else if(A[1].hand_clicked === 1){
+
+                A[1].hand_clicked = 2;
+
+                if(A[1].random_number_array != null){
+
+                    A[1].hand_clicked = 0;
+
+                    T[1].random_animation.stop();
+                    let randomizer = Page.getCurrentRandomizer();
+                    Loading.stop(randomizer.MESSAGE.GET, 1000);
+
+                    H5.setAutoFontSizeText('1-text-random-output', '1-auto-random-output', '1-div-random-output', A[1].random_number_array.join(' '));
+                    H5.setInnerText('1-text-data-output', D[1].getOutputString(' '));
+                    A[1].random_number_array = null;
+                    F[1].setControlDisable(false, []);
+                    
+                    F[1].setFuncDisable(D[1].count === 0, []);
+
+                }
+
+            }
+        },
+        reset: function(){
+            F[1].setControlDisable(false, []);
+            F[1].setInputDisable(false, []);
+            D[1].clear();
+            F[1].updateEliminate();
+            H5.setAutoFontSizeText('1-text-random-output', '1-auto-random-output', '1-div-random-output', Language.DEFAULT);
+            H5.setInnerText('1-text-data-output', Language.EMPTY);
+        },
+        generate: function(){
+            let min = H5.readValueAsInt('1-input-min', 0);
+            let max = H5.readValueAsInt('1-input-max', 1);
+            let randomizer = Page.getStaticRandomizer();
+            H5.setAutoHeightValue('1-input-list', '1-input-list-auto', randomizer.getIndexArray(min, max).join(' '));
+        },
+
+        initDataArray: function(){
+            if(D[1].isEmpty()){
+                F[1].setInputDisable(true, []);
+                D[1].setInputString(H5.readValueAsString('1-input-list', '1 2 3 4'), ' ')
+            }
+        },
+
+        setInputDisable: function(value, option){
+            if (!option.contains('1-input-list')) H5.setDisable('1-input-list', value);
+            
+            if (!option.contains('1-button-reset')) H5.setDisable('1-button-reset', !value);
+
+            if (!option.contains('1-input-min')) H5.setDisable('1-input-min', value);
+            if (!option.contains('1-input-max')) H5.setDisable('1-input-max', value);
+            if (!option.contains('1-button-generate')) H5.setDisable('1-button-generate', value);
+        },
+        setControlDisable: function(value, option){
+            if (!option.contains('1-input-eliminate')) H5.setDisable('1-input-eliminate', value);
+
+            if (!option.contains('1-input-num')) H5.setDisable('1-input-num', value);
+            
+            if (!option.contains('1-button-auto'))  H5.setDisable('1-button-auto', value);
+            if (!option.contains('1-button-hand'))  H5.setDisable('1-button-hand', value);
+            if (!option.contains('1-button-reset')) H5.setDisable('1-button-reset', value);
+
+            if (!option.contains('1-checkbox-random-org')) H5.setDisable('1-checkbox-random-org', value);
+        },
+        setFuncDisable: function(value, option){
+            if (!option.contains('1-button-auto'))  H5.setDisable('1-button-auto', value);
+            if (!option.contains('1-button-hand'))  H5.setDisable('1-button-hand', value);
+        },
+        setGenerateDisable: function(value, option){
+            if (!option.contains('1-button-generate')) H5.setDisable('1-button-generate', value);
+        },
+        setFileDisable: function(value, option){
+            if (!option.contains('1-button-generate')) H5.setDisable('1-button-generate', value);
+        },
+
+        checkDisable: function(){
+            let min = H5.readValueAsInt('1-input-min', 0);
+            let max = H5.readValueAsInt('1-input-max', 1);
+            F[1].setGenerateDisable(min > max, []);
+        },
+    },
+
 };
 // ================================================================================
 
@@ -551,7 +662,7 @@ let F = {
 let T = {
 
     loading: new Task(() => {
-        Loading.addProgress(0.1);
+        Loading.addProgress(0.01);
     }, 100),
 
     0: {
@@ -563,10 +674,9 @@ let T = {
             let randomizer = Page.getStaticRandomizer();
             let temp_array = randomizer.getIndexArray(min, max);
 
-            let num = H5.readValueAsInt('0-input-num', 1);
-            if(num > temp_array.length) num = D[0].count;
+            let num = A[0].random_num;
             let repetition = H5.isChecked('0-checkbox-repetition');
-
+            
             let random_number_array = [];
             
             if(repetition){
@@ -578,12 +688,36 @@ let T = {
                 }
             }
 
-            H5.setInnerText('0-text-random-output', random_number_array.join(' '));
+            H5.setAutoFontSizeText('0-text-random-output', '0-auto-random-output', '0-div-random-output', random_number_array.join(' '));
 
         }, 10),
 
     },
 
+    1: {
+
+        random_animation: new Task(async function(){
+
+            D.static.clear();
+            D.static.setInputString(H5.readValueAsString('1-input-list', '1 2 3 4'), ' ')
+            D.static.setEliminateString(H5.readValueAsString('1-input-eliminate', ''), ' ');
+
+            let num = A[1].random_num;
+            
+            let random_number_array = [];
+            
+            let randomizer = Page.getStaticRandomizer();
+            for(let i = 1; i <= num; i++){
+                let random_index = await randomizer.getRandomInt(D.static.count);
+                random_number_array.push(D.static.moveIndexToOutput(random_index));
+            }
+
+            H5.setAutoFontSizeText('1-text-random-output', '1-auto-random-output', '1-div-random-output', random_number_array.join(' '));
+
+        }, 10),
+
+    },
+    
 };
 // ================================================================================
 

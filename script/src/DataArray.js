@@ -11,7 +11,6 @@ DataArray.prototype._full_input = [];
 DataArray.prototype._input = [];
 DataArray.prototype._eliminate = [];
 DataArray.prototype._output = [];
-DataArray.prototype._num = 0;
 // --------------------------------------------------------------------------------
 // * Getter & Setter
 // --------------------------------------------------------------------------------
@@ -36,7 +35,7 @@ DataArray.prototype.clear = function(){
 // * Function
 // --------------------------------------------------------------------------------
 DataArray.prototype.isEmpty = function(){
-    return this._full_input.length + this._input.length + this._eliminate.length + this._output.length === 0;
+    return this._full_input.length + this._input.length + this._output.length === 0;
 };
 // --------------------------------------------------------------------------------
 DataArray.prototype.setInputRange = function(min, max){

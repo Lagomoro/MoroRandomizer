@@ -4,6 +4,7 @@
 let Language = {
 
     EMPTY: '空',
+    DEFAULT: '-',
 
     Randomizer: {
         
@@ -85,7 +86,11 @@ H5.readElementValueAsInt = function(element, default_value){
     return element.value == '' ? default_value : Math.floor(Number(element.value));
 };
 H5.readElementValueAsString = function(element, default_value){
-    return element.value == '' ? default_value : element.value;
+    return element.value == '' ? default_value : String(element.value);
+};
+
+H5.getValue = function(id){
+    return H5.getElement(id).value;
 };
 
 H5.setValue = function(id, value){
@@ -104,11 +109,47 @@ H5.setDisable = function(id, value){
     H5.getElement(id).disabled = value;
 };
 // --------------------------------------------------------------------------------
+H5.getInnerText = function(id){
+    return H5.getElement(id).innerText;
+};
+H5.getTextContent = function(id){
+    return H5.getElement(id).textContent;
+};
+
 H5.setInnerText = function(id, text){
     H5.getElement(id).innerText = text;
+};
+H5.setTextContent = function(id, text){
+    H5.getElement(id).textContent = text;
 };
 // --------------------------------------------------------------------------------
 H5.setAttribute = function(id, attr, value){
     H5.getElement(id).setAttribute(attr, value);
+};
+// --------------------------------------------------------------------------------
+H5.setAutoFontSizeText = function(id, auto_id, field_id, text){
+    let element = H5.getElement(id);
+    element.innerText = text;
+
+    let auto_element = H5.getElement(auto_id);
+    auto_element.textContent = element.innerText;
+    
+    let field_element = H5.getElement(field_id);
+    
+    for(let i = 120; i > 0; i--){
+        auto_element.style.fontSize = i + 'px';
+        if (auto_element.offsetHeight <= field_element.offsetHeight){
+            element.style.fontSize = i + 'px';
+            break;
+        }
+    }
+};
+// --------------------------------------------------------------------------------
+H5.setAutoHeightValue = function(id, auto_id, text){
+    let element = H5.getElement(id);
+    element.value = text;
+
+    let auto_element = H5.getElement(auto_id);
+    auto_element.textContent = element.value;
 };
 // ================================================================================

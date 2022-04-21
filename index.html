@@ -24,14 +24,16 @@
     <script type="text/javascript" src="./script/src/Task.js"></script>
     <script type="text/javascript" src="./script/main.js"></script>
 
+    <title>MoroRandomizer</title>
 </head>
 <body>
     <div class="uk-background-cover uk-padding" data-src="./assets/background.png" uk-img>
         <div class="uk-card uk-card-default uk-card-body uk-align-center uk-margin-remove-bottom main-card">
             <div>
                 <ul class="uk-tab uk-flex-center" uk-tab>
-                    <li class="uk-active" onclick="Page.change(0)"><a href="#">随机数生成</a></li>
-                    
+                    <li class="uk-active" onclick="Page.change(0)"><a href="#">随机数生成器</a></li>
+                    <li><a href="#" onclick="Page.change(1)">列表抽取</a></li>
+                    <!--<li><a href="#" onclick="Page.change(2)">心动时刻（老虎机）</a></li>-->
                 </ul>
 
                 <div class="uk-text-center uk-padding-small uk-padding-remove-top">
@@ -44,8 +46,9 @@
                             <div>
                                 <input class="transparent-input uk-input uk-text-center" type="text" placeholder="随机数生成器">
                             </div>
-                            <div class="uk-text-center uk-margin-large-top uk-margin-large-bottom">
-                                <text id="0-text-random-output" class="uk-text-bold " style="font-size: 120px;">0</text>
+                            <div id="0-div-random-output" class="uk-text-center uk-width-1-1 uk-margin-large-top uk-margin-large-bottom random-output-field ">
+                                <text id="0-auto-random-output" class="uk-text-bold random-output-field-auto">-</text>
+                                <text id="0-text-random-output" class="uk-text-bold random-output-field-text">-</text>
                             </div>
                             <div class="uk-text-center uk-padding-small uk-padding-remove-bottom">
                                 <text>已中列表：</text>
@@ -55,26 +58,29 @@
 
                         <li class="">
                             <div>
-                                <input class="transparent-input uk-input uk-text-center" type="text" placeholder="奖池抽奖">
+                                <input class="transparent-input uk-input uk-text-center" type="text" placeholder="列表抽取">
                             </div>
-                            <div class="uk-text-center uk-margin-large-top uk-margin-large-bottom">
-                                <text id="page2-output-text-value" class="uk-text-bold " style="font-size: 120px;">0</text>
+                            <div id="1-div-random-output" class="uk-text-center uk-width-1-1 uk-margin-large-top uk-margin-large-bottom random-output-field ">
+                                <text id="1-auto-random-output" class="uk-text-bold random-output-field-auto">-</text>
+                                <text id="1-text-random-output" class="uk-text-bold random-output-field-text">-</text>
                             </div>
                             <div class="uk-text-center uk-padding-small uk-padding-remove-bottom">
                                 <text>已中列表：</text>
-                                <text id="page2-output-text-array">空</text>
+                                <text id="1-text-data-output">空</text>
                             </div>
                         </li>
 
-                        <li class=""><div>
-                                <input class="transparent-input uk-input uk-text-center" type="text" placeholder="老虎机">
+                        <li class="">
+                            <div>
+                                <input class="transparent-input uk-input uk-text-center" type="text" placeholder="心动时刻">
                             </div>
-                            <div class="uk-text-center uk-margin-large-top uk-margin-large-bottom">
-                                <text id="page3-output-text-value" class="uk-text-bold " style="font-size: 120px;">0</text>
+                            <div id="2-div-random-output" class="uk-text-center uk-width-1-1 uk-margin-large-top uk-margin-large-bottom random-output-field ">
+                                <text id="2-auto-random-output" class="uk-text-bold random-output-field-auto">-</text>
+                                <text id="2-text-random-output" class="uk-text-bold random-output-field-text">-</text>
                             </div>
                             <div class="uk-text-center uk-padding-small uk-padding-remove-bottom">
                                 <text>已中列表：</text>
-                                <text id="page3-output-text-array">空</text>
+                                <text id="2-text-data-output">空</text>
                             </div>
                         </li>
 
@@ -105,7 +111,7 @@
                                         </label>
                                         <div class="uk-inline uk-width-1-1">
                                             <span class="uk-form-icon" uk-icon="icon: minus-circle"></span>
-                                            <input id="0-input-min" class="uk-input" type="number" oninput="Limit.int(this);F[0].checkDisable()" placeholder="最小值，默认为 0">
+                                            <input id="0-input-min" class="uk-input" type="number" oninput="Limit.range(this, 0, 10000);F[0].checkDisable()" placeholder="最小值，默认为 0">
                                         </div>
                                     </div>
                                     <div class="uk-width-1-3">
@@ -114,7 +120,7 @@
                                         </label>
                                         <div class="uk-inline uk-width-1-1">
                                             <span class="uk-form-icon" uk-icon="icon: plus-circle"></span>
-                                            <input id="0-input-max" class="uk-input" type="number" oninput="Limit.gt(this, 0);F[0].checkDisable()" placeholder="最大值，默认为 1">
+                                            <input id="0-input-max" class="uk-input" type="number" oninput="Limit.range(this, 0, 10000);F[0].checkDisable()" placeholder="最大值，默认为 1">
                                         </div>
                                     </div>
                                     <div class="uk-width-1-3">
@@ -123,7 +129,7 @@
                                         </label>
                                         <div class="uk-inline uk-width-1-1">
                                             <span class="uk-form-icon" uk-icon="icon: clock"></span>
-                                            <input id="0-input-num" class="uk-input" type="number" oninput="Limit.range(this, 1, 10000)" placeholder="随机次数，默认为 1">
+                                            <input id="0-input-num" class="uk-input" type="number" oninput="Limit.range(this, 1, 100)" placeholder="随机次数，默认为 1">
                                         </div>
                                     </div>
                                     <div class="uk-width-1-3">
@@ -133,13 +139,13 @@
                                         <button id="0-button-hand" class="uk-button uk-button-primary uk-padding-remove uk-width-1-1" onclick="F[0].handExtract()">手动抽取</button>
                                     </div>
                                     <div class="uk-width-1-3">
-                                        <button id="0-button-reset" class="uk-button uk-button-danger uk-padding-remove uk-width-1-1" onclick="F[0].reset()" disabled>清空</button>
+                                        <button id="0-button-reset" class="uk-button uk-button-danger uk-padding-remove uk-width-1-1" onclick="F[0].reset()" disabled>重置</button>
                                     </div>
                                     <div class="uk-width-1-5">
                                         <label><input id="0-checkbox-repetition" class="uk-checkbox" type="checkbox"> 允许重复</label>
                                     </div>
                                     <div class="uk-width-4-5">
-                                        <label><input id="0-checkbox-random-org" class="uk-checkbox" type="checkbox" checked> 使用 random.org，基于大气噪音（物理）的真随机生成器</label>
+                                        <label><input id="0-checkbox-random-org" class="uk-checkbox" type="checkbox" checked> 使用 random.org，基于物理（大气噪音）的真随机生成器</label>
                                     </div>
                                 </form>
                             </div>
@@ -150,12 +156,17 @@
                                 <div class="uk-grid-small" uk-grid>
                                     <div class="uk-width-1-1">
                                         <label class="uk-form-label" uk-grid>
-                                            <div class="uk-width-1-1 uk-text-left">随机抽取列表，以空格或换行符分隔</div>
+                                            <div class="uk-width-1-1 uk-text-left">
+                                                随机抽取列表，以空格或换行符分隔
+                                                <span class="uk-link" onclick="F[1].showData()">
+                                                    收起/展开内容
+                                                </span>
+                                            </div>
                                         </label>
                                         <div class="uk-inline uk-width-1-1">
-                                            <pre class="uk-textarea textarea-auto-height"><span id="page2-input-allow-list-auto-height"></span></br></pre>
-                                            <textarea id="page2-input-allow-list" class="uk-textarea no-resize-textarea" type="text"
-                                                oninput="Limit.autoHeight(this)" placeholder="随机抽取数据，默认为 1 2 3 4"></textarea>
+                                            <pre class="uk-textarea multi-line-textarea-auto"><span id="1-input-list-auto"></span></br></pre>
+                                            <textarea id="1-input-list" class="uk-textarea multi-line-textarea" type="text"
+                                                oninput="Limit.autoHeight(this, '1-input-list-auto')" placeholder="随机抽取数据，默认为 1 2 3 4"></textarea>
                                             <span class="uk-form-icon" uk-icon="icon: list"></span>
                                         </div>
                                     </div>
@@ -165,33 +176,29 @@
                                         </label>
                                         <div class="uk-inline uk-width-1-1">
                                             <span class="uk-form-icon" uk-icon="icon: ban"></span>
-                                            <input id="page2-input-abandon-list" class="uk-input" type="text"
-                                                placeholder="剔除数据，默认为空">
+                                            <input id="1-input-eliminate" class="uk-input" type="text" oninput="F[1].updateEliminate()" placeholder="剔除数据，默认为空">
                                         </div>
                                     </div>
                                     <div class="uk-width-1-3">
                                         <label class="uk-form-label" uk-grid>
-                                            <div class="uk-width-1-1 uk-text-left">生成随机数的数量</div>
+                                            <div class="uk-width-1-1 uk-text-left">随机抽取的数量</div>
                                         </label>
                                         <div class="uk-inline uk-width-1-1">
                                             <span class="uk-form-icon" uk-icon="icon: clock"></span>
-                                            <input id="page2-input-number" class="uk-input" type="number" oninput="Limit.int(this)" placeholder="随机次数，默认为1">
+                                            <input id="1-input-num" class="uk-input" type="number" oninput="Limit.range(this, 1, 100)" placeholder="随机次数，默认为 1">
                                         </div>
                                     </div>
-                                    <div class="uk-width-1-4">
-                                        <button class="uk-button uk-button-default uk-width-1-1" onclick="page2_doRandom_One()">抽取一个</button>
+                                    <div class="uk-width-1-3">
+                                        <button id="1-button-auto" class="uk-button uk-button-primary uk-padding-remove uk-width-1-1" onclick="F[1].autoExtract()">自动抽取</button>
                                     </div>
-                                    <div class="uk-width-1-4">
-                                        <button class="uk-button uk-button-default uk-width-1-1" onclick="page2_doRandom_All()">全部抽取</button>
+                                    <div class="uk-width-1-3">
+                                        <button id="1-button-hand" class="uk-button uk-button-primary uk-padding-remove uk-width-1-1" onclick="F[1].handExtract()">手动抽取</button>
                                     </div>
-                                    <div class="uk-width-1-4">
-                                        <button class="uk-button uk-button-primary uk-width-1-1" onclick="page2_doRandom_StartOrEnd()">开始/停止</button>
-                                    </div>
-                                    <div class="uk-width-1-4">
-                                        <button class="uk-button uk-button-danger uk-width-1-1" onclick="page2_reset()">重置</button>
+                                    <div class="uk-width-1-3">
+                                        <button id="1-button-reset" class="uk-button uk-button-danger uk-padding-remove uk-width-1-1" onclick="F[1].reset()" disabled>重置</button>
                                     </div>
                                     <div class="uk-width-1-1">
-                                        <label><input class="uk-checkbox" type="checkbox" checked> 使用 random.org，基于大气噪音（物理）的真随机生成器</label>
+                                        <label><input id="1-checkbox-random-org" class="uk-checkbox" type="checkbox" checked> 使用 random.org，基于物理（大气噪音）的真随机生成器</label>
                                     </div>
                                     <div class="uk-width-1-1">
                                         <hr class="uk-divider-icon uk-width-1-1">
@@ -202,7 +209,7 @@
                                         </label>
                                         <div class="uk-inline uk-width-1-1">
                                             <span class="uk-form-icon" uk-icon="icon: minus-circle"></span>
-                                            <input id="page2-input-min" class="uk-input" type="number" oninput="Limit.int(this)" placeholder="最小值，默认为 0">
+                                            <input id="1-input-min" class="uk-input" type="number" oninput="Limit.range(this, 0, 10000);F[1].checkDisable()" placeholder="最小值，默认为 0">
                                         </div>
                                     </div>
                                     <div class="uk-width-1-3">
@@ -211,17 +218,18 @@
                                         </label>
                                         <div class="uk-inline uk-width-1-1">
                                             <span class="uk-form-icon" uk-icon="icon: plus-circle"></span>
-                                            <input id="page2-input-max" class="uk-input" type="number" oninput="Limit.int(this)" placeholder="最大值，默认为 1">
+                                            <input id="1-input-max" class="uk-input" type="number" oninput="Limit.range(this, 0, 10000);F[1].checkDisable()" placeholder="最大值，默认为 1">
                                         </div>
                                     </div>
                                     <div class="uk-width-1-3">
                                         <label class="uk-form-label" uk-grid>
                                             <div class="uk-width-1-1 uk-text-left" style="color: transparent;">自动填充</div>
                                         </label>
-                                        <button class="uk-button uk-button-default uk-width-1-1" onclick="page2_autoFill()">自动填充数据</button>
+                                        <button id="1-button-generate" class="uk-button uk-button-primary uk-width-1-1" onclick="F[1].generate()">自动填充数据</button>
                                     </div>
-                                    <div class="uk-width-1-1">
+                                    <!--<div class="uk-width-1-1">
                                         <div class="page2-file-excel uk-placeholder uk-text-center">
+                                            <span uk-icon="icon: cloud-upload"></span>
                                             <span class="uk-text-middle">将要加载的 EXCEL 数据文件拖动到此，或者</span>
                                             <div uk-form-custom>
                                                 <input type="file">
@@ -230,8 +238,8 @@
                                         </div>
                                     </div>
                                     <div class="uk-width-1-1">
-                                        <button class="uk-button uk-button-default uk-width-1-1" onclick="page2_doRandom_One()">将当前数据保存成 excel，下次直播拖到上面继续使用</button>
-                                    </div>
+                                        <button class="uk-button uk-button-default uk-width-1-1" onclick="F[1].saveXlsx()">将当前数据保存成 excel，下次直播拖到上面继续使用</button>
+                                    </div>-->
                                 </form>
                             </div>
                             
