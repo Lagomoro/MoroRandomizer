@@ -1,17 +1,16 @@
+.main-card {
+    width: 900px;
+}
+
 .area-live-streaming {
     position: relative;
     border: 1px solid gainsboro;
     min-height: 400px;
 }
-
 .area-control{
     position: relative;
     border: 1px solid gainsboro;
     min-height: 200px;
-}
-
-.main-card {
-    width: 900px;
 }
 
 .transparent-input{
@@ -20,18 +19,17 @@
     font-size: 25px;
 }
 
-.no-resize-textarea{
-    padding-left: 40px !important;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    resize: none;
+.random-output-field{
+    height: 200px;
 }
-
-.textarea-auto-height{
+.random-output-field-auto{
+    padding: 0px 15px;
+    left: 0;
+    position: absolute;
     visibility: hidden;
+}
+.random-output-field-text{
+    font-size: 120px;
 }
 
 .loading-message{
@@ -39,7 +37,26 @@
     position: absolute;
     bottom: 0;
 }
-
 .background-transparent{
     background-color: transparent;
+}
+
+.multi-line-textarea-auto{
+    padding-left: 40px !important;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    visibility: hidden;
+}
+.multi-line-textarea{
+    padding-left: 40px !important;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    resize: none;
 }
