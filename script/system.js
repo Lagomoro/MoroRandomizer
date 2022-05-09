@@ -5,6 +5,7 @@ let Language = {
 
     EMPTY: '空',
     DEFAULT: '-',
+    ERROR: '错误',
 
     Randomizer: {
         
@@ -12,12 +13,14 @@ let Language = {
             WAITING: "正在从本地随机生成器取得随机结果 ...",
             WAITING_ARRAY: "正在从本地随机生成器取得随机结果 ({0}/{1}) ...",
             GET: "已从 本地随机生成器 取得结果！",
+            ERROR: "本地随机生成器错误。"
         },
 
         RandomOrg: {
             WAITING: "正在向 random.org 请求随机结果 ...",
             WAITING_ARRAY: "正在向 random.org 请求随机结果 ({0}/{1}) ...",
             GET: "已从 random.org 取得结果！",
+            ERROR: "网络连接错误，获取结果失败。",
         },
 
     },
