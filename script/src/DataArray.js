@@ -51,7 +51,7 @@ DataArray.prototype.setInputRange = function(min, max){
 };
 
 DataArray.prototype.setInputString = function(input_str, separator_char){
-    let str = input_str.replace('\n', separator_char);
+    let str = input_str.replace(/\n/g, separator_char).replace(/\r/g, separator_char);
     let array = str.split(separator_char);
     this._input = [];
     for(let i = 0; i < array.length; i++){
@@ -67,7 +67,7 @@ DataArray.prototype.setInputString = function(input_str, separator_char){
 };
 
 DataArray.prototype.setEliminateString = function(input_str, separator_char){
-    let str = input_str.replace('\n', separator_char);
+    let str = input_str.replace(/\n/g, separator_char).replace(/\r/g, separator_char);
     let array = str.split(separator_char);
     this._eliminate = [];
     for(let i = 0; i < array.length; i++){
