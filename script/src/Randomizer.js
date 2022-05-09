@@ -143,7 +143,7 @@ RandomOrgRandomizer.prototype.requestRandomRangeArray = async function(min, max,
             resolve(this.dataToIntArray(response.data, '\n'));
         }).catch(error => {
             console.log(error);
-            resolve(null);
+            resolve([-1]);
         });
     });
 };

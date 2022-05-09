@@ -339,12 +339,32 @@ let F = {
             if(repetition){
                 Loading.start(randomizer.MESSAGE.WAITING);
                 random_index_array = await randomizer.getRandomIntArray(D[0].count, num);
+                if(random_index_array.length == 0 || random_index_array[0] == -1){
+                    Loading.stop(randomizer.MESSAGE.ERROR, 1000);
+
+                    H5.setAutoFontSizeText('0-text-random-output', '0-auto-random-output', '0-div-random-output', Language.ERROR);
+                    H5.setInnerText('0-text-data-output', D[0].getOutputString(' '));
+
+                    F[0].setControlDisable(false, []);
+                    F[0].setFuncDisable(D[0].count === 0, []);
+                    return;
+                }
                 random_number_array = D[0].getIndexArrayToOutput(random_index_array);
             }else{
                 Loading.start(randomizer.MESSAGE.WAITING);
                 for(let i = 1; i <= num; i++){
                     Loading.setText(randomizer.MESSAGE.WAITING_ARRAY.format(i, num));
                     let random_index = await randomizer.getRandomInt(D[0].count);
+                    if(random_index == -1){
+                        Loading.stop(randomizer.MESSAGE.ERROR, 1000);
+
+                        H5.setAutoFontSizeText('0-text-random-output', '0-auto-random-output', '0-div-random-output', Language.ERROR);
+                        H5.setInnerText('0-text-data-output', D[0].getOutputString(' '));
+
+                        F[0].setControlDisable(false, []);
+                        F[0].setFuncDisable(D[0].count === 0, []);
+                        return;
+                    }
                     random_index_array.push(random_index);
                     random_number_array.push(D[0].moveIndexToOutput(random_index));
                 }
@@ -381,12 +401,40 @@ let F = {
                 if(repetition){
                     Loading.start(randomizer.MESSAGE.WAITING);
                     random_index_array = await randomizer.getRandomIntArray(D[0].count, num);
+                    if(random_index_array.length == 0 || random_index_array[0] == -1){
+                        A[0].hand_clicked = 0;
+
+                        T[0].random_animation.stop();
+                        Loading.stop(randomizer.MESSAGE.ERROR, 1000);
+    
+                        H5.setAutoFontSizeText('0-text-random-output', '0-auto-random-output', '0-div-random-output', Language.ERROR);
+                        H5.setInnerText('0-text-data-output', D[0].getOutputString(' '));
+                        A[0].random_number_array = null;
+                        F[0].setControlDisable(false, []);
+                        
+                        F[0].setFuncDisable(D[0].count === 0, []);
+                        return;
+                    }
                     random_number_array = D[0].getIndexArrayToOutput(random_index_array);
                 }else{
                     Loading.start(randomizer.MESSAGE.WAITING);
                     for(let i = 1; i <= num; i++){
                         Loading.setText(randomizer.MESSAGE.WAITING_ARRAY.format(i, num));
                         let random_index = await randomizer.getRandomInt(D[0].count);
+                        if(random_index == -1){
+                            A[0].hand_clicked = 0;
+
+                            T[0].random_animation.stop();
+                            Loading.stop(randomizer.MESSAGE.ERROR, 1000);
+        
+                            H5.setAutoFontSizeText('0-text-random-output', '0-auto-random-output', '0-div-random-output', Language.ERROR);
+                            H5.setInnerText('0-text-data-output', D[0].getOutputString(' '));
+                            A[0].random_number_array = null;
+                            F[0].setControlDisable(false, []);
+                            
+                            F[0].setFuncDisable(D[0].count === 0, []);
+                            return;
+                        }
                         random_number_array.push(D[0].moveIndexToOutput(random_index));
                     }
                 }
@@ -514,6 +562,16 @@ let F = {
             for(let i = 1; i <= num; i++){
                 Loading.setText(randomizer.MESSAGE.WAITING_ARRAY.format(i, num));
                 let random_index = await randomizer.getRandomInt(D[1].count);
+                if(random_index == -1){
+                    Loading.stop(randomizer.MESSAGE.ERROR, 1000);
+
+                    H5.setAutoFontSizeText('1-text-random-output', '1-auto-random-output', '1-div-random-output', Language.ERROR);
+                    H5.setInnerText('1-text-data-output', D[1].getOutputString(' '));
+
+                    F[1].setControlDisable(false, []);
+                    F[1].setFuncDisable(D[1].count === 0, []);
+                    return;
+                }
                 random_number_array.push(D[1].moveIndexToOutput(random_index));
             }
             
@@ -547,6 +605,20 @@ let F = {
                 for(let i = 1; i <= num; i++){
                     Loading.setText(randomizer.MESSAGE.WAITING_ARRAY.format(i, num));
                     let random_index = await randomizer.getRandomInt(D[1].count);
+                    if(random_index == -1){
+                        A[1].hand_clicked = 0;
+
+                        T[1].random_animation.stop();
+                        Loading.stop(randomizer.MESSAGE.ERROR, 1000);
+    
+                        H5.setAutoFontSizeText('1-text-random-output', '1-auto-random-output', '1-div-random-output', Language.ERROR);
+                        H5.setInnerText('1-text-data-output', D[1].getOutputString(' '));
+                        A[1].random_number_array = null;
+                        F[1].setControlDisable(false, []);
+                        
+                        F[1].setFuncDisable(D[1].count === 0, []);
+                        return;
+                    }
                     random_number_array.push(D[1].moveIndexToOutput(random_index));
                 }
                 
